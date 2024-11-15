@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useLayoutEffect } from "react";
+import React, { useState, useRef, useLayoutEffect } from "react";
 import styled, { keyframes, createGlobalStyle } from "styled-components";
 import throttle from "lodash.throttle";
 

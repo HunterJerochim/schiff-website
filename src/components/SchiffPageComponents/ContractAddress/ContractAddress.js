@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 const ContractAddress = () => {
-  const contract = "0X8C7AC134ED985367EADC6F727D79E8295E11435C";
+  const contract = "G7Qyg6omCK2ff2g9pzzaURZUqoPLvNQHmg26pVGBpump";
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -108,7 +108,7 @@ const ContractContainer = styled.div`
   color: #e1e1a3;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   width: auto;
-  max-width: 100%; 
+  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

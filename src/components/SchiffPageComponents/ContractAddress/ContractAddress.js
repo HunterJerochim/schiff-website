@@ -41,7 +41,7 @@ const ContractAddress = () => {
 
   return (
     <MainContractContainer>
-      <ContractAddressTitle>Copy the Contract Address</ContractAddressTitle>
+      <ContractAddressTitle>Contract Address</ContractAddressTitle>
       <ContractContainer
         onClick={handleCopy}
         title={contract}

@@ -59,7 +59,7 @@ const GridLayout = () => {
     <ResponsiveGridContainer>
       {images.map((src, index) => (
         <GridItem key={index}>
-          <img src={src} alt={`Grid Image ${index + 1}`} />
+          <img src={src} alt={`Grid item ${index + 1}`} />
         </GridItem>
       ))}
     </ResponsiveGridContainer>

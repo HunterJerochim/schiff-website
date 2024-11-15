@@ -47,64 +47,51 @@ const glowColors = keyframes`
   }
 `;
 
-const spin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
 const Modal = ({ onClose, playAudio }) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const goldRef = useRef(null);
   const bitcoinRef = useRef(null);
   const buttonContainerRef = useRef(null);
 
-  const handleMouseMove = useCallback(
-    throttle((e) => {
-      if (goldRef.current && buttonContainerRef.current) {
-        const goldRect = goldRef.current.getBoundingClientRect();
-        const containerRect =
-          buttonContainerRef.current.getBoundingClientRect();
-        const evadeDistance = 100;
+  const handleMouseMove = throttle((e) => {
+    if (goldRef.current && buttonContainerRef.current) {
+      const goldRect = goldRef.current.getBoundingClientRect();
+      const containerRect = buttonContainerRef.current.getBoundingClientRect();
+      const evadeDistance = 100;
 
-        const cursorX = e.clientX - containerRect.left;
-        const cursorY = e.clientY - containerRect.top;
+      const cursorX = e.clientX - containerRect.left;
+      const cursorY = e.clientY - containerRect.top;
 
-        const goldCenterX =
-          goldRect.left - containerRect.left + goldRect.width / 2;
-        const goldCenterY =
-          goldRect.top - containerRect.top + goldRect.height / 2;
+      const goldCenterX =
+        goldRect.left - containerRect.left + goldRect.width / 2;
+      const goldCenterY =
+        goldRect.top - containerRect.top + goldRect.height / 2;
 
-        const dx = goldCenterX - cursorX;
-        const dy = goldCenterY - cursorY;
-        const distanceFromCursor = Math.sqrt(dx * dx + dy * dy);
+      const dx = goldCenterX - cursorX;
+      const dy = goldCenterY - cursorY;
+      const distanceFromCursor = Math.sqrt(dx * dx + dy * dy);
 
-        if (distanceFromCursor < evadeDistance) {
-          const angle = Math.atan2(dy, dx);
-          const moveDistance = 150;
-          let newLeft =
-            goldCenterX + Math.cos(angle) * moveDistance - goldRect.width / 2;
-          let newTop =
-            goldCenterY + Math.sin(angle) * moveDistance - goldRect.height / 2;
+      if (distanceFromCursor < evadeDistance) {
+        const angle = Math.atan2(dy, dx);
+        const moveDistance = 150;
+        let newLeft =
+          goldCenterX + Math.cos(angle) * moveDistance - goldRect.width / 2;
+        let newTop =
+          goldCenterY + Math.sin(angle) * moveDistance - goldRect.height / 2;
 
-          newLeft = Math.max(
-            20,
-            Math.min(newLeft, containerRect.width - goldRect.width - 20)
-          );
-          newTop = Math.max(
-            20,
-            Math.min(newTop, containerRect.height - goldRect.height - 20)
-          );
+        newLeft = Math.max(
+          20,
+          Math.min(newLeft, containerRect.width - goldRect.width - 20)
+        );
+        newTop = Math.max(
+          20,
+          Math.min(newTop, containerRect.height - goldRect.height - 20)
+        );
 
-          setPosition({ top: newTop, left: newLeft });
-        }
+        setPosition({ top: newTop, left: newLeft });
       }
-    }, 50),
-    []
-  );
+    }
+  }, 50);
 
   useLayoutEffect(() => {
     if (bitcoinRef.current && goldRef.current && buttonContainerRef.current) {

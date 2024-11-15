@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const SCHIFF_HEADER_IMAGE =
-  "https://res.cloudinary.com/dav8yugzm/image/upload/v1731554495/schiff-website-header-2_nsollv.png";
+  "https://res.cloudinary.com/dav8yugzm/image/upload/v1731640768/schiff-header_cpgqtv.png";
 
 const Header = () => {
   return (

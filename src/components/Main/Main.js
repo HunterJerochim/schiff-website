@@ -51,6 +51,14 @@ const AnimatedSchiff = styled.img`
   height: auto;
   animation: ${moveAround} 20s linear infinite;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    width: 80px;
+  }
+
+  @media (max-width: 480px) {
+    width: 60px;
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -63,7 +71,13 @@ const HeaderContainer = styled.div`
   flex-direction: column;
   background-image: url(${COIN_CAVE_BACKGROUND_IMAGE});
   background-size: cover;
+  background-position: center;
   overflow: hidden;
+  padding: 0 20px;
+
+  @media (max-width: 768px) {
+    padding: 0 10px;
+  }
 `;
 
 const moveUpDown = keyframes`
@@ -104,11 +118,15 @@ const HeaderTitle = styled.h1`
   @media (max-width: 768px) {
     font-size: 60px;
     margin-bottom: 100px;
+    text-align: center;
+    max-width: 90%;
   }
 
   @media (max-width: 480px) {
     font-size: 40px;
     margin-bottom: 50px;
+    text-align: center;
+    max-width: 80%;
   }
 `;
 
@@ -175,6 +193,18 @@ const EnterButton = styled.button`
     height: 300px;
     opacity: 1;
     transition: 0s;
+  }
+
+  @media (max-width: 768px) {
+    height: 50px;
+    width: 160px;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    height: 40px;
+    width: 120px;
+    font-size: 0.9rem;
   }
 `;
 

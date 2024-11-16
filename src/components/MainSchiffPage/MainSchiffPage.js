@@ -109,6 +109,6 @@ const GoblinImage = styled.img`
   width: 150px;
   height: auto;
   transition: top 2.5s ease, left 2.5s ease;
-  z-index: 1000;
+  z-index: 999;
   pointer-events: none;
 `;

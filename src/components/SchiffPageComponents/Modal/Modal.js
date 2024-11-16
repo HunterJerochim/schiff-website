@@ -7,7 +7,6 @@ const GlobalStyle = createGlobalStyle`
   
   body {
     margin: 0;
-    padding: 0;
     font-family: 'Press Start 2P', cursive;
   }
 `;
@@ -47,13 +46,41 @@ const glowColors = keyframes`
   }
 `;
 
+const spin3D = keyframes`
+  0% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  75% {
+    transform: rotateX(0deg) rotateY(180deg);
+  }
+  100% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+`;
+
 const Modal = ({ onClose, playAudio }) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const goldRef = useRef(null);
   const bitcoinRef = useRef(null);
   const buttonContainerRef = useRef(null);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleMouseMove = throttle((e) => {
+    if (isMobile) return;
+
     if (goldRef.current && buttonContainerRef.current) {
       const goldRect = goldRef.current.getBoundingClientRect();
       const containerRect = buttonContainerRef.current.getBoundingClientRect();
@@ -121,14 +148,23 @@ const Modal = ({ onClose, playAudio }) => {
           of Truth. Before we continue, you must answer one question...
         </ModalTitle>
         <ModalSubTitle>What is the hardest money on earth?</ModalSubTitle>
-        <ButtonContainer ref={buttonContainerRef} onMouseMove={handleMouseMove}>
-          <GoldBar
-            ref={goldRef}
-            src={GOLD_BAR_IMG}
-            alt="Gold Bar"
-            style={{ top: position.top, left: position.left }}
-            aria-hidden="true"
-          />
+        <ButtonContainer
+          ref={buttonContainerRef}
+          onMouseMove={!isMobile ? handleMouseMove : undefined}
+        >
+          {!isMobile && (
+            <GoldBar
+              ref={goldRef}
+              src={GOLD_BAR_IMG}
+              alt="Gold Bar"
+              style={{
+                top: `${position.top}px`,
+                left: `${position.left}px`,
+              }}
+              aria-hidden="true"
+            />
+          )}
+          {isMobile && <MobileGoldBar src={GOLD_BAR_IMG} alt="Gold Bar" />}
           <BitcoinButton
             ref={bitcoinRef}
             onClick={handleBitcoinClick}
@@ -172,6 +208,19 @@ const ModalContainer = styled.div`
   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
     rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding: 100px 0 0 0;
+    justify-content: flex-start;
+    transform: none;
+    border-radius: 0;
+    box-shadow: none;
+    gap: 40px;
+  }
 `;
 
 const GoldGifOverlay = styled.img`
@@ -185,24 +234,23 @@ const GoldGifOverlay = styled.img`
   opacity: 0.8;
 `;
 
-const spin3D = keyframes`
-  0% {
-    transform: rotateX(0deg) rotateY(0deg);
-  }
-  75% {
-    transform: rotateX(0deg) rotateY(180deg);
-  }
-  100% {
-    transform: rotateX(0deg) rotateY(0deg);
-  }
-`;
-
 const ModalTitle = styled.h1`
   color: #ff00ff;
   font-family: "Sour Gummy", sans-serif;
   text-align: center;
   animation: ${glowColors} 4s infinite linear;
   text-shadow: 0 0 5px rgba(255, 0, 255, 0.8), 0 0 10px rgba(255, 0, 255, 0.6);
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    text-align: center;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 90%;
+  }
 `;
 
 const ModalSubTitle = styled.h2`
@@ -215,6 +263,13 @@ const ModalSubTitle = styled.h2`
   display: inline-block;
   animation: ${spin3D} 5s linear infinite;
   transform-origin: center center;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    padding: 8px;
+    text-align: center;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -224,6 +279,14 @@ const ButtonContainer = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    height: auto;
+    gap: 40px;
+  }
 `;
 
 const GoldBar = styled.img`
@@ -232,6 +295,20 @@ const GoldBar = styled.img`
   height: 50px;
   transition: top 0.3s ease, left 0.3s ease, transform 0.3s ease;
   pointer-events: none;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const MobileGoldBar = styled.img`
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+
+  @media (min-width: 769px) {
+    display: none;
+  }
 `;
 
 const BitcoinButton = styled.button`
@@ -245,9 +322,14 @@ const BitcoinButton = styled.button`
   align-items: center;
   justify-content: center;
   transition: transform 0.3s;
+  z-index: 1;
 
   &:hover {
     transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 0;
   }
 `;
 
@@ -255,4 +337,9 @@ const BitcoinImage = styled.img`
   width: 75px;
   height: 75px;
   object-fit: contain;
+
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+  }
 `;

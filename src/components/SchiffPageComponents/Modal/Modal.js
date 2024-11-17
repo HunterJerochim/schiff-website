@@ -59,9 +59,9 @@ const spin3D = keyframes`
 `;
 
 const Modal = ({ onClose, playAudio }) => {
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  const goldRef = useRef(null);
+  const [bitcoinPosition, setBitcoinPosition] = useState({ top: 0, left: 0 });
   const bitcoinRef = useRef(null);
+  const goldRef = useRef(null);
   const buttonContainerRef = useRef(null);
 
   const [isMobile, setIsMobile] = useState(false);
@@ -78,61 +78,71 @@ const Modal = ({ onClose, playAudio }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useLayoutEffect(() => {
+    if (bitcoinRef.current && goldRef.current && buttonContainerRef.current) {
+      const goldRect = goldRef.current.getBoundingClientRect();
+      const containerRect = buttonContainerRef.current.getBoundingClientRect();
+      const bitcoinRect = bitcoinRef.current.getBoundingClientRect();
+
+      const initialTop = (containerRect.height - bitcoinRect.height) / 2;
+      const initialLeft = goldRect.width + 20;
+
+      setBitcoinPosition({ top: initialTop, left: initialLeft });
+    }
+  }, [isMobile]);
+
   const handleMouseMove = throttle((e) => {
     if (isMobile) return;
 
-    if (goldRef.current && buttonContainerRef.current) {
-      const goldRect = goldRef.current.getBoundingClientRect();
+    if (bitcoinRef.current && buttonContainerRef.current) {
       const containerRect = buttonContainerRef.current.getBoundingClientRect();
       const evadeDistance = 100;
 
       const cursorX = e.clientX - containerRect.left;
       const cursorY = e.clientY - containerRect.top;
 
-      const goldCenterX =
-        goldRect.left - containerRect.left + goldRect.width / 2;
-      const goldCenterY =
-        goldRect.top - containerRect.top + goldRect.height / 2;
+      const bitcoinCenterX =
+        bitcoinPosition.left + bitcoinRef.current.offsetWidth / 2;
+      const bitcoinCenterY =
+        bitcoinPosition.top + bitcoinRef.current.offsetHeight / 2;
 
-      const dx = goldCenterX - cursorX;
-      const dy = goldCenterY - cursorY;
+      const dx = bitcoinCenterX - cursorX;
+      const dy = bitcoinCenterY - cursorY;
       const distanceFromCursor = Math.sqrt(dx * dx + dy * dy);
 
       if (distanceFromCursor < evadeDistance) {
         const angle = Math.atan2(dy, dx);
         const moveDistance = 150;
         let newLeft =
-          goldCenterX + Math.cos(angle) * moveDistance - goldRect.width / 2;
+          bitcoinCenterX +
+          Math.cos(angle) * moveDistance -
+          bitcoinRef.current.offsetWidth / 2;
         let newTop =
-          goldCenterY + Math.sin(angle) * moveDistance - goldRect.height / 2;
+          bitcoinCenterY +
+          Math.sin(angle) * moveDistance -
+          bitcoinRef.current.offsetHeight / 2;
 
         newLeft = Math.max(
           20,
-          Math.min(newLeft, containerRect.width - goldRect.width - 20)
+          Math.min(
+            newLeft,
+            containerRect.width - bitcoinRef.current.offsetWidth - 20
+          )
         );
         newTop = Math.max(
           20,
-          Math.min(newTop, containerRect.height - goldRect.height - 20)
+          Math.min(
+            newTop,
+            containerRect.height - bitcoinRef.current.offsetHeight - 20
+          )
         );
 
-        setPosition({ top: newTop, left: newLeft });
+        setBitcoinPosition({ top: newTop, left: newLeft });
       }
     }
   }, 50);
 
-  useLayoutEffect(() => {
-    if (bitcoinRef.current && goldRef.current && buttonContainerRef.current) {
-      const bitcoinRect = bitcoinRef.current.getBoundingClientRect();
-      const goldRect = goldRef.current.getBoundingClientRect();
-
-      const initialTop = bitcoinRect.height / 2 - goldRect.height / 2;
-      const initialLeft = bitcoinRect.width + 20;
-
-      setPosition({ top: initialTop, left: initialLeft });
-    }
-  }, []);
-
-  const handleBitcoinClick = () => {
+  const handleGoldClick = () => {
     playAudio();
     onClose();
   };
@@ -153,32 +163,55 @@ const Modal = ({ onClose, playAudio }) => {
           onMouseMove={!isMobile ? handleMouseMove : undefined}
         >
           {!isMobile && (
+            <BitcoinButton
+              ref={bitcoinRef}
+              style={{
+                top: `${bitcoinPosition.top}px`,
+                left: `${bitcoinPosition.left}px`,
+              }}
+              role="button"
+              tabIndex="0"
+              aria-label="Bitcoin Button"
+              onKeyPress={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  // No action on BitcoinButton
+                }
+              }}
+            >
+              <BitcoinImage src={BITCOIN_IMG} alt="Bitcoin" />
+            </BitcoinButton>
+          )}
+          {isMobile && (
+            <MobileBitcoinButton>
+              <BitcoinImage src={BITCOIN_IMG} alt="Bitcoin" />
+            </MobileBitcoinButton>
+          )}
+          {!isMobile && (
             <GoldBar
               ref={goldRef}
               src={GOLD_BAR_IMG}
               alt="Gold Bar"
-              style={{
-                top: `${position.top}px`,
-                left: `${position.left}px`,
+              onClick={handleGoldClick}
+              role="button"
+              tabIndex="0"
+              aria-label="Close Modal and Play Music"
+              onKeyPress={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  handleGoldClick();
+                }
               }}
-              aria-hidden="true"
             />
           )}
-          {isMobile && <MobileGoldBar src={GOLD_BAR_IMG} alt="Gold Bar" />}
-          <BitcoinButton
-            ref={bitcoinRef}
-            onClick={handleBitcoinClick}
-            role="button"
-            tabIndex="0"
-            aria-label="Close Modal and Play Music"
-            onKeyPress={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                handleBitcoinClick();
-              }
-            }}
-          >
-            <BitcoinImage src={BITCOIN_IMG} alt="Bitcoin" />
-          </BitcoinButton>
+          {isMobile && (
+            <MobileGoldBar
+              onClick={handleGoldClick}
+              role="button"
+              tabIndex="0"
+              aria-label="Close Modal and Play Music"
+            >
+              <img src={GOLD_BAR_IMG} alt="Gold Bar" />
+            </MobileGoldBar>
+          )}
         </ButtonContainer>
       </ModalContainer>
     </>
@@ -290,21 +323,33 @@ const ButtonContainer = styled.div`
 `;
 
 const GoldBar = styled.img`
-  position: absolute;
   width: 50px;
   height: 50px;
-  transition: top 0.3s ease, left 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 
   @media (max-width: 768px) {
     display: none;
   }
 `;
 
-const MobileGoldBar = styled.img`
+const MobileGoldBar = styled.button`
   width: 50px;
   height: 50px;
-  object-fit: contain;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 
   @media (min-width: 769px) {
     display: none;
@@ -312,8 +357,7 @@ const MobileGoldBar = styled.img`
 `;
 
 const BitcoinButton = styled.button`
-  cursor: pointer;
-  position: relative;
+  position: absolute;
   background: none;
   border: none;
   padding: 0;
@@ -321,15 +365,24 @@ const BitcoinButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s;
+  transition: top 0.3s ease, left 0.3s ease;
   z-index: 1;
+  cursor: default;
 
   &:hover {
-    transform: scale(1.05);
+    transform: none;
   }
 
   @media (max-width: 768px) {
-    margin-top: 0;
+    display: none;
+  }
+`;
+
+const MobileBitcoinButton = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
   }
 `;
 

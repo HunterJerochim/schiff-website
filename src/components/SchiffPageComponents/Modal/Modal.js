@@ -46,18 +46,6 @@ const glowColors = keyframes`
   }
 `;
 
-const spin3D = keyframes`
-  0% {
-    transform: rotateX(0deg) rotateY(0deg);
-  }
-  75% {
-    transform: rotateX(0deg) rotateY(180deg);
-  }
-  100% {
-    transform: rotateX(0deg) rotateY(0deg);
-  }
-`;
-
 const Modal = ({ onClose, playAudio }) => {
   const [bitcoinPosition, setBitcoinPosition] = useState({ top: 0, left: 0 });
   const bitcoinRef = useRef(null);
@@ -293,8 +281,8 @@ const ModalSubTitle = styled.h2`
   text-align: center;
   border: 2px solid #ffcc00;
   padding: 10px;
+  margin-top: 20px;
   display: inline-block;
-  animation: ${spin3D} 5s linear infinite;
   transform-origin: center center;
   margin: 0;
 

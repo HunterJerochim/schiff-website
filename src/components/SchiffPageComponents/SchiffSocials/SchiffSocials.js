@@ -117,12 +117,6 @@ const MainSchiffSocialsContainer = styled.div`
   margin-top: 50px;
 `;
 
-const StyledImage = styled.img`
-  height: 75px;
-  width: 115px;
-  cursor: pointer;
-`;
-
 const StyledDexImage = styled.img`
   height: 50px;
   width: 180px;
@@ -206,7 +200,10 @@ const arrowGlow = keyframes`
 
 const StyledArrow = styled(FontAwesomeIcon)`
   color: ${(props) => props.arrowColor || "#000"};
-  animation: ${(props) => arrowGlow} 4s infinite, ${moveUpDown} 2s infinite;
+  animation: ${(props) =>
+    props.shouldAnimate
+      ? `${arrowGlow} 4s infinite, ${moveUpDown} 2s infinite`
+      : "none"};
   cursor: pointer;
 
   font-size: ${(props) => props.size || "6rem"};

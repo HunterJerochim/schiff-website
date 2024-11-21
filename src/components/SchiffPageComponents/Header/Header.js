@@ -20,6 +20,10 @@ const MainHeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 480px) {
+    padding: 0;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -32,4 +36,11 @@ const ImageContainer = styled.div`
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+
+  @media (max-width: 480px) {
+    height: 200px;
+    width: 100%;
+    margin: 0;
+    background-size: cover;
+  }
 `;

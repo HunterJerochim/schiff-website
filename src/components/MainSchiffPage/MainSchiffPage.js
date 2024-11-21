@@ -26,8 +26,8 @@ const MainSchiffPage = () => {
 
   useEffect(() => {
     const moveGoblin = () => {
-      const goblinWidth = 150;
-      const goblinHeight = 150;
+      const goblinWidth = window.innerWidth < 600 ? 100 : 150;
+      const goblinHeight = window.innerWidth < 600 ? 100 : 150;
       const maxWidth = window.innerWidth - goblinWidth;
       const maxHeight = window.innerHeight - goblinHeight;
       const newLeft = Math.floor(Math.random() * maxWidth);
@@ -102,6 +102,10 @@ const MainSchiffPageContainer = styled.div`
 
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+
+  @media (max-width: 768px) {
+    padding: 0px;
+  }
 `;
 
 const GoblinImage = styled.img`
@@ -111,4 +115,8 @@ const GoblinImage = styled.img`
   transition: top 2.5s ease, left 2.5s ease;
   z-index: 999;
   pointer-events: none;
+
+  @media (max-width: 600px) {
+    width: 100px;
+  }
 `;

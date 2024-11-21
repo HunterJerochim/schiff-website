@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXTwitter, faTelegram } from "@fortawesome/free-brands-svg-icons";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
-const DEX_TOOLS_ICON =
-  "https://res.cloudinary.com/dav8yugzm/image/upload/v1731558161/dextools_logo_full_dark_rx9zn7.svg";
+const DEX_SCREENER_ICON =
+  "https://res.cloudinary.com/dav8yugzm/image/upload/v1732149424/dex-screener-logo_zragsx.png";
 
 const DEX_SCREENER_LINK =
   "https://dexscreener.com/solana/6byovudbpv3jkkwzgx3vlbeabdymahkzlcjtr2thvytz";
@@ -50,7 +50,7 @@ const SchiffSocials = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <StyledImage src={DEX_TOOLS_ICON} alt="dex-tools-icon" />
+            <StyledDexImage src={DEX_SCREENER_ICON} alt="dex-tools-icon" />
           </StyledAnchor>
         </MainIconContainer>
       </SchiffSocialsContainer>
@@ -120,6 +120,12 @@ const MainSchiffSocialsContainer = styled.div`
 const StyledImage = styled.img`
   height: 75px;
   width: 115px;
+  cursor: pointer;
+`;
+
+const StyledDexImage = styled.img`
+  height: 50px;
+  width: 180px;
   cursor: pointer;
 `;
 

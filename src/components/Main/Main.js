@@ -74,6 +74,7 @@ const HeaderContainer = styled.div`
   background-position: center;
   overflow: hidden;
   padding: 0 20px;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
     padding: 0 10px;
@@ -114,18 +115,18 @@ const HeaderTitle = styled.h1`
   z-index: 2;
   animation: ${moveUpDown} 3s ease-in-out infinite,
     ${flashColors} 6s linear infinite;
+  text-align: center;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
     font-size: 60px;
     margin-bottom: 100px;
-    text-align: center;
     max-width: 90%;
   }
 
   @media (max-width: 480px) {
     font-size: 40px;
     margin-bottom: 50px;
-    text-align: center;
     max-width: 80%;
   }
 `;

@@ -11,7 +11,7 @@ const WALKING_SCHIFF_GIPH =
 const Main = () => {
   return (
     <HeaderContainer>
-      <HeaderTitle>WELCOME TO SCHIFF AI</HeaderTitle>
+      <HeaderTitle>WELCOME TO SCHAIFF AI</HeaderTitle>
       <StyledLink to="/schiffcoin">
         <EnterButton>Enter</EnterButton>
       </StyledLink>

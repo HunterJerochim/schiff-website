@@ -141,10 +141,7 @@ const Modal = ({ onClose, playAudio }) => {
       <ModalContainer>
         <GoldGifOverlay src={GOLD_FALLING_GIPH} alt="Gold Falling Overlay" />
 
-        <ModalTitle>
-          Welcome to the Buillionaire's Den, Peter Schiff's Exclusive Gold Vault
-          of Truth. Before we continue, you must answer one question...
-        </ModalTitle>
+        <ModalTitle>Welcome to the Buillionaire's Den! $SCHIFF</ModalTitle>
         <ModalSubTitle>What is the hardest money on earth?</ModalSubTitle>
         <ButtonContainer
           ref={buttonContainerRef}
